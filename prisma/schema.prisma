@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model role {
+  id   String @id @default(cuid())
+  name String @db.VarChar(255)
+  user user[]
+}
+
+model user {
+  id             String     @id @default(cuid())
+  mail           String     @unique(map: "mail") @db.VarChar(255)
+  password       String     @db.VarChar(255)
+  role_id        String
+  first_name     String     @db.VarChar(255)
+  last_name      String     @db.VarChar(255)
+  created_at     DateTime?  @default(now()) @db.Timestamp(0)
+  updated_at     DateTime?  @db.Timestamp(0)
+  is_active      Boolean?   @default(true)
+  is_first_login Boolean?   @default(true)
+  role           role       @relation(fields: [role_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "user_ibfk_1")
+  planning       planning[]
+
+  @@index([role_id], map: "role_id")
+}
+
+model planning {
+  id       String     @id @default(cuid())
+  user_id  String
+  user     user       @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "user_ibfk_2")
+  presence presence[]
+
+  @@index([user_id], map: "user_id")
+}
+
+model presence {
+  id             String    @id @default(cuid())
+  planning_id    String
+  planning       planning? @relation(fields: [planning_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "planning_ibfk_1")
+  arrival_time   DateTime? @db.Timestamp(0)
+  departure_time DateTime? @db.Timestamp(0)
+  created_at     DateTime? @default(now()) @db.Timestamp(0)
+  updated_at     DateTime? @db.Timestamp(0)
+  day            Int
+  month          Int
+  year           Int
+  observation    String    @db.Text
+}
