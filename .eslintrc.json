@@ -1,3 +1,21 @@
 {
-  "extends": "next/core-web-vitals"
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "@typescript-eslint"
+  ],
+  "extends": [
+    "next/core-web-vitals",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:import/typescript"
+  ],
+  "rules": {
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/no-use-before-define": [
+      "error"
+    ],
+    "no-use-before-define": "off",
+    "react/require-default-props": "off",
+    "react/prop-types": "off",
+    "import/no-unresolved": "off"
+  }
 }
