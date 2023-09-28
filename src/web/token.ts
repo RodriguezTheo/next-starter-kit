@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import { NextApiResponse } from "next";
 import { User } from "@prisma/client";
 import { NextApiRequestCookies } from "next/dist/server/api-utils";
-import prisma from "../../lib/prisma";
+import prisma from "../../backend/prisma";
 
 const JWT_TOKEN_KEY = process.env.JWT_TOKEN_KEY;
 
@@ -58,7 +58,7 @@ export async function userFromRequest(
 
     const user = await prisma.user.findUnique({
       where: {
-        mail: (data as any).mail
+        mail: (data as User).mail
       }
     });
 
